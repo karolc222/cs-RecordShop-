@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RecordShop.Models;
 
 namespace RecordShop.Data
 {
@@ -6,10 +7,8 @@ namespace RecordShop.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-
-        }
-
-        public DbSet<Record> Records { get; set; }
+        }        
+        
+        public DbSet<Album> Albums { get; set; }
     }
-
 }
