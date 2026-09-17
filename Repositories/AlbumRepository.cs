@@ -53,15 +53,14 @@ namespace RecordShop.Repositories
 
             if (existingAlbum != null)
             {
-                existingAlbum.Title = updatedAlbum.Title;
+                existingAlbum.AlbumTitle = updatedAlbum.AlbumTitle;
                 existingAlbum.Artist = updatedAlbum.Artist;
                 existingAlbum.ReleaseDate = updatedAlbum.ReleaseDate;
 
                 _context.SaveChanges();
             }
         }
-
-}
+    }
 }
 
 
