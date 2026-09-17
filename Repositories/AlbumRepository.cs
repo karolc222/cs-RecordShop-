@@ -1,64 +1,77 @@
-//handles all database access 
-using Microsoft.EntityFrameworkCore;
+//handles all database access, read and modify album data
 using RecordShop.Data;
 using RecordShop.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace RecordShop.Repositories
 {
-    public class AlbumRepository 
+    public class AlbumRepository : IAlbumRepository
     {
-        //storing db connection inside the class 
-        // _context means private field, only this class can use it 
         private readonly AppDbContext _context;
 
-        //dependancy injection 
-        //context constructor
+        //dependancy injection/context constructor
         public AlbumRepository(AppDbContext context)
         {
             _context = context;
         }
 
+
         //list all albums in stock 
-        public List<Album> GetAll()
+        public async Task<List<Album>> GetAllAlbumsAsync()
         {
-            return _context.Albums.ToList();
+            return await _context.Albums.ToListAsync();
         }
+
 
         // get album by id 
-        public Album GetById(int id)
+        public async Task<Album?> GetAlbumByIdAsync(int id)
         {
-            return _context.Albums.Find(id);
+            return await _context.Albums.FindAsync(id);
         }
 
-        // add new albums 
-        public void Add(Album album)
+
+        // add new album
+        public async Task<Album> PostAlbumAsync(Album postedAlbum)
         {
-            _context.Albums.Add(album);
-            _context.SaveChanges();
+            _context.Albums.Add(postedAlbum);
+            await _context.SaveChangesAsync();
+
+            return postedAlbum;
         }
 
-        public void Delete(int id)
+        public async Task<Album?> PutAlbumAsync(int id, Album updatedAlbum)
         {
-            var album = _context.Albums.Find(id);
-            if (album != null)
+            var existingAlbum = await _context.Albums.Find(id);
+
+            if (existingAlbum == null)
             {
-                _context.Albums.Remove(album);
-                _context.SaveChanges();
+                return null;
             }
+
+            existingAlbum.AlbumTitle = updatedAlbum.AlbumTitle;
+            existingAlbum.ArtistId = updatedAlbum.ArtistId;
+            existingAlbum.ReleaseDate = updatedAlbum.ReleaseDate;
+            existingAlbumStock.Stock = updatedAlbum.Stock;
+
+            await _context.SaveChanges();
+            return existingAlbum;
         }
 
-        public void Update(int id, Album updatedAlbum)
+        
+        public async Task<bool> DeleteAlbumByIdAsync(int id)
         {
-            var existingAlbum = _context.Albums.Find(id);
+            var album = await _context.Albums.FindAsync(id);
 
-            if (existingAlbum != null)
+            if (album == null)
             {
-                existingAlbum.AlbumTitle = updatedAlbum.AlbumTitle;
-                existingAlbum.Artist = updatedAlbum.Artist;
-                existingAlbum.ReleaseDate = updatedAlbum.ReleaseDate;
-
-                _context.SaveChanges();
+                return false;
             }
+
+            _context.Albums.Remove(album);
+            await _context.SaveChanges();
+
+            return true; 
         }
     }
 }
