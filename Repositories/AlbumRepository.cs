@@ -42,7 +42,7 @@ namespace RecordShop.Repositories
 
         public async Task<Album?> PutAlbumAsync(int id, Album updatedAlbum)
         {
-            var existingAlbum = await _context.Albums.Find(id);
+            var existingAlbum = await _context.Albums.FindAsync(id);
 
             if (existingAlbum == null)
             {
@@ -52,9 +52,9 @@ namespace RecordShop.Repositories
             existingAlbum.AlbumTitle = updatedAlbum.AlbumTitle;
             existingAlbum.ArtistId = updatedAlbum.ArtistId;
             existingAlbum.ReleaseDate = updatedAlbum.ReleaseDate;
-            existingAlbumStock.Stock = updatedAlbum.Stock;
+            existingAlbum.Stock = updatedAlbum.Stock;
 
-            await _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return existingAlbum;
         }
 
@@ -69,9 +69,9 @@ namespace RecordShop.Repositories
             }
 
             _context.Albums.Remove(album);
-            await _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return true; 
+            return true;
         }
     }
 }

@@ -5,36 +5,42 @@ namespace RecordShop.Services
 {
     public class AlbumService : IAlbumService
     {
-        private readonly AlbumRepository _repository;
+        private readonly IAlbumRepository _repository;
 
-        public AlbumService(AlbumRepository repository)
+        //constructor for dependency injection
+        public AlbumService(IAlbumRepository repository)
         {
             _repository = repository;
         }
 
-        public List<Album> GetAll()
+
+        public async Task<List<Album>> GetAllAlbumsAsync()
         {
-            return _repository.GetAll();
+            return await _repository.GetAllAlbumsAsync();
         }
 
-        public Album GetById(int id)
+        public async Task<Album?> GetAlbumByIdAsync(int id)
         {
-            return _repository.GetById(id);
+            return await _repository.GetAlbumByIdAsync(id);
         }
 
-        public void Add(Album album)
+        //the service receives the album and passes it to the repository
+        public async Task<Album> PostAlbumAsync(Album album)
         {
-            _repository.Add(album);
+            return await _repository.PostAlbumAsync(album);
+        }
+        
+
+        public async Task<Album?> PutAlbumAsync(int id, Album album)
+        {
+            return await _repository.PutAlbumAsync(id, album);
         }
 
-        public void Delete(int id)
+        public async Task<bool> DeleteAlbumByIdAsync(int id)
         {
-            _repository.Delete(id);
+            return await _repository.DeleteAlbumByIdAsync(id);
         }
 
-        public void Update(int id, Album album)
-        {
-            _repository.Update(id, album);
-        }
+        
     }
 }
