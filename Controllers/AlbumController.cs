@@ -7,11 +7,11 @@ namespace RecordShop.Controllers
     [ApiController]
     [Route("api/[controller]")]
 
-    public class RecordController : ControllerBase
+    public class AlbumController : ControllerBase
     {
         private readonly IAlbumService _service;
 
-        public RecordController(IAlbumService service)
+        public AlbumController(IAlbumService service)
         {
             _service = service;
         }
@@ -45,7 +45,7 @@ namespace RecordShop.Controllers
         public async Task<IActionResult> DeleteAlbumByIdAsync(int id)
         {
             var deleted = await _service.DeleteAlbumByIdAsync(id);
-            
+
             if (!deleted)
                 return NotFound();
             return NoContent();
